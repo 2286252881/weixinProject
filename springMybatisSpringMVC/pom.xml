@@ -177,6 +177,12 @@
 			<version>2.1</version>
 			<classifier>jdk15</classifier>
 		</dependency>
+		<!-- httpcomponents -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.5</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>springMybatisSpringMVC</finalName>
