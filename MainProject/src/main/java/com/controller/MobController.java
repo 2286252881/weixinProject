@@ -35,21 +35,26 @@ public class MobController {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		Map map = MessageUtil.xmlToMap(request);
-		String fromUserName = (String) map.get("FromUserName");
-		String toUserName = (String) map.get("ToUserName");
-		String msgType = (String) map.get("MsgType");
-		String content = (String) map.get("Content");
+		String fromUserName = (String) map.get("FromUserName");//微信用户
+		String toUserName = (String) map.get("ToUserName");//微信公众号
+		String msgType = (String) map.get("MsgType");//消息类型
+		String content = (String) map.get("Content");//消息内容
 		String message = null;
-		if ("text".equals(msgType)) {
+		if (MessageUtil.MESSAGE_TEXT.equals(msgType)) {//消息类型为文本text
 			if ("1".equals(content)) {
 				message = MessageUtil.initNewsMessage(toUserName, fromUserName, content);
 			}else if ("2".equals(content)) {
 				message = MessageUtil.initMusicMessage(toUserName, fromUserName, content);
 			}
-		} else if ("event".equals(msgType)) {
-			String eventTpye = (String)map.get("Event");
-			if ("subscribe".equals(eventTpye)) {
-				message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.menuText());
+		} else if (MessageUtil.MESSAGE_EVENT.equals(msgType)) {//消息类型为事件event
+			String eventTpye = (String)map.get("Event");//获取具体的事件名称
+			if (MessageUtil.MESSAGE_SUBSCRIBE.equals(eventTpye)) {
+				message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.DYText());
+			}else if (MessageUtil.MESSAGE_CLICK.equals(eventTpye)) {
+				message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.DYText());
+			}else if(MessageUtil.MESSAGE_UNSUBSCRIBE.equals(eventTpye)){
+				//取消关注,用户接受不到我们发送的消息了
+				message=MessageUtil.unSubscribeText(toUserName, fromUserName,MessageUtil.TDText());
 			}
 		}
 		out.print(message);
@@ -64,4 +69,5 @@ public class MobController {
 	public ModelAndView toNewMusic() {
 		return new ModelAndView("/listenMusic");
 	}
+	
 }

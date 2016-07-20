@@ -1,9 +1,16 @@
 package com.weixin.po;
 
+
+
+/**
+ * @remark 封装文本消息类型
+ * @author Administrator
+ *
+ */
 public class TextMessage extends BaseMessage
 {
-  private String Content;
-  private String MsgId;
+  private String Content;//文本消息内容
+  private String MsgId;//消息Id
 
   public String getContent()
   {

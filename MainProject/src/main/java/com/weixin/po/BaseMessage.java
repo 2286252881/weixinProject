@@ -1,7 +1,7 @@
 package com.weixin.po;
 
 public class BaseMessage {
-	private String ToUserName;
+	private String ToUserName; 
 	private String FromUserName;
 	private long CreateTime;
 	private String MsgType;

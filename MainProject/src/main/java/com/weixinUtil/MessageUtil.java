@@ -33,8 +33,8 @@ public class MessageUtil {
 	public static final String MESSAGE_EVENT = "event";
 	public static final String MESSAGE_SUBSCRIBE = "subscribe";
 	public static final String MESSAGE_UNSUBSCRIBE = "unsubscribe";
-	public static final String MESSAGE_CLICK = "click";
-	public static final String MESSAGE_VIEW = "view";
+	public static final String MESSAGE_CLICK = "CLICK";
+	public static final String MESSAGE_VIEW = "VIEW";
 	public static final String MESSAGE_SCANCODE = "scancode_push";
 
 	public static Map<String, String> xmlToMap(HttpServletRequest request) throws IOException, DocumentException{
@@ -123,7 +123,10 @@ public class MessageUtil {
 		imageMessage.setImage(image);
 		return imageMessagetoXml(imageMessage);
 	}
-
+	
+	
+	
+	//订阅该公众号给出的text信息
 	public static String initText(String toUserName, String fromUserName, String content) {
 		TextMessage text = new TextMessage();
 		text.setFromUserName(toUserName);
@@ -133,24 +136,26 @@ public class MessageUtil {
 		text.setContent(content);
 		return textMessagetoXml(text);
 	}
-
-	public static String menuText() {
+	public static String DYText() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("欢迎您的关注,请按照菜单提示进行操作!\n\n");
-		sb.append("1、今日歌曲\n");
+		sb.append("1、今日推荐歌曲\n");
 		sb.append("2、music\n");
 		return sb.toString();
 	}
-
-	public static String firstMenu() {
+	
+	//退订该公众号给出的text信息
+	public static String unSubscribeText(String toUserName, String fromUserName, String content){
+		TextMessage text = new TextMessage();
+		text.setFromUserName(toUserName);
+		text.setToUserName(fromUserName);
+		text.setMsgType("text");
+		text.setContent(content);
+		return textMessagetoXml(text);
+	};
+	public static String TDText() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("推送音乐!\n");
-		return sb.toString();
-	}
-
-	public static String secondMenu() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("推送笑话!\n");
+		sb.append("感谢你的使用！祝你生活愉快!\n\n");
 		return sb.toString();
 	}
 }

@@ -19,6 +19,8 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.List;
+
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -37,7 +39,7 @@ public class WeixinUtil {
 	private static final String CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
 	private static final String DELETE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
 	private static final String CONN_OAUTH2 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-	private static final String CALLBACK_IP="https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=ACCESS_TOKEN";
+	private static final String CALLBACK_IP = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=ACCESS_TOKEN";
 
 	public static JSONObject doGetStr(String url) throws ParseException, IOException {
 		DefaultHttpClient client = new DefaultHttpClient();
@@ -74,11 +76,21 @@ public class WeixinUtil {
 		}
 		return token;
 	}
-	//网页认证授权CONN_OAUTH2
+
+	// 获取服务器IP
+	public static List<String> getCallback_IP() throws ParseException, IOException {
+		String callBack_IP = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=ACCESS_TOKEN"
+				.replace("ACCESS_TOKEN", getAccessToken().getToken());
+		JSONObject jsonObject = doGetStr(callBack_IP);
+		System.out.println(jsonObject);
+		List<String> ip_list = (List<String>) jsonObject.get("ip_list");
+		return ip_list;
+	}
+
+	// 网页认证授权CONN_OAUTH2
 	public static String getRequestCodeUrl(String redirectUrl) {
 		String getCodeUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
-				.replace("APPID", "wxb1db314939e2b8b2")
-				.replace("REDIRECT_URI", redirectUrl);
+				.replace("APPID", "wxb1db314939e2b8b2").replace("REDIRECT_URI", redirectUrl);
 		return getCodeUrl;
 	}
 
@@ -167,14 +179,14 @@ public class WeixinUtil {
 	public static Menu initMenu() {
 		Menu menu = new Menu();
 		ClickButton button11 = new ClickButton();
-		button11.setName("链接菜单");
 		button11.setType("click");
-		button11.setKey("11");
+		button11.setName("操作指南");
+		button11.setKey("help");
 
 		ViewButton button21 = new ViewButton();
-		button21.setName("页面");
+		button21.setName("搜索");
 		button21.setType("view");
-		button21.setUrl(getRequestCodeUrl("http://zhwx.ngrok.cc/superssm/weixin/newMessage.action"));
+		button21.setUrl(getRequestCodeUrl("http://www.soso.com/"));
 
 		ClickButton button31 = new ClickButton();
 		button31.setName("二维码扫描");
@@ -188,9 +200,8 @@ public class WeixinUtil {
 
 		Button button = new Button();
 		button.setName("常用菜单");
-		button.setSub_button(new Button[] { button31, button32 });
-
 		menu.setButton(new Button[] { button11, button21, button });
+		button.setSub_button(new Button[] { button31, button32 });
 		return menu;
 	}
 
